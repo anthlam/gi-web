@@ -1,3 +1,10 @@
+# TODO: Add tests
+# TODO: Setup to deploy to Heroku
+# TODO: Make issue numbers links to github
+# TODO: Multiple get methods for Needs QA and Needs Code Review
+# TODO: Fix time format on Label Applied column
+# TODO: Improve performance
+
 require 'sinatra'
 require 'open-uri'
 require 'json'
