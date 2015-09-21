@@ -7,11 +7,11 @@
       %th Label Applied
       %th Assignee
   %tbody
-  - items.each do |item|
+  - issues.each do |issue|
     %tr
-      %td= item['number']
-      %td= item['title']
-      %td= item['label_event_data']['created_at']
+      %td= issue['number']
+      %td= issue['title']
+      %td= issue['label_event_data']['created_at']
       %td
-        - if item['assignee']
-          %img{ src: item['assignee']['avatar_url'], height: 20, width: 20 }= item['assignee']['login']
+        - if issue['assignee']
+          %img{ src: issue['assignee']['avatar_url'], height: 20, width: 20 }= issue['assignee']['login']

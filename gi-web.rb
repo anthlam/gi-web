@@ -18,15 +18,15 @@ BASE_URL = 'https://api.github.com'
 get '/' do
   api_response = api_get("#{BASE_URL}/search/issues?q=#{QUERY}")
 
-  items = api_response['items']
+  issues = api_response['items']
 
   label = QUERY.match(/label:\"(.*)\"/)[1]
 
-  items = get_label_event_data(items, label)
+  issues = get_label_event_data(issues, label)
 
-  items = sort_items(items)
+  issues = sort_items(issues)
 
-  haml :index, :locals => {label: label, items: items}
+  haml :index, :locals => {label: label, issues: issues}
 end
 
 def get_label_event_data(items, label)
