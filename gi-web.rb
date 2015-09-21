@@ -19,7 +19,7 @@ get '/' do
 
   items = sort_items(items)
 
-  haml :index, :locals => {items: items}
+  haml :index, :locals => {label: label, items: items}
 end
 
 def get_label_event_data(items, label)
