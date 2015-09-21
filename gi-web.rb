@@ -1,7 +1,7 @@
 # TODO: Add tests
 # TODO: Setup to deploy to Heroku
 # TODO: Make issue numbers links to github
-# TODO: Multiple get methods for Needs QA and Needs Code Review
+# TODO: Multiple get methods for Needs QA, Needs Code Review, WIP, etc.
 # TODO: Fix time format on Label Applied column
 # TODO: Improve performance
 
