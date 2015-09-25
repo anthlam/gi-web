@@ -12,20 +12,25 @@ require 'haml'
 
 GITHUB_USERNAME = ENV['GITHUB_USERNAME']
 GITHUB_TOKEN = ENV['GITHUB_TOKEN']
-QUERY = ENV['GI_QUERY']
 BASE_URL = 'https://api.github.com'
 
-get '/' do
-  api_response = api_get("#{BASE_URL}/search/issues?q=#{QUERY}")
-
+get '/needs_qa' do
+  query = 'state:open type:pr user:thinkthroughmath label:"Needs QA"'
+  api_response = api_get("#{BASE_URL}/search/issues?q=#{query}")
   issues = api_response['items']
-
-  label = QUERY.match(/label:\"(.*)\"/)[1]
-
+  label = query.match(/label:\"(.*)\"/)[1]
   issues = get_label_event_data(issues, label)
-
   issues = sort_items(issues)
+  haml :index, :locals => {label: label, issues: issues}
+end
 
+get '/needs_cr' do
+  query = 'state:open type:pr user:thinkthroughmath label:"Needs Code Review"'
+  api_response = api_get("#{BASE_URL}/search/issues?q=#{query}")
+  issues = api_response['items']
+  label = query.match(/label:\"(.*)\"/)[1]
+  issues = get_label_event_data(issues, label)
+  issues = sort_items(issues)
   haml :index, :locals => {label: label, issues: issues}
 end
 
