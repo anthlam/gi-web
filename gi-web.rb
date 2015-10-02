@@ -14,14 +14,14 @@ GITHUB_TOKEN = ENV['GITHUB_TOKEN']
 
 get '/needs_qa' do
   label = 'Needs QA'
-  issues = get_sorted_github_pr_list_by_label(label)
-  haml :index, :locals => {label: label, issues: issues}
+  prs = get_sorted_github_pr_list_by_label(label)
+  haml :index, :locals => {label: label, list: prs}
 end
 
 get '/needs_cr' do
   label = 'Needs Code Review'
-  issues = get_sorted_github_pr_list_by_label(label)
-  haml :index, :locals => {label: label, issues: issues}
+  prs = get_sorted_github_pr_list_by_label(label)
+  haml :index, :locals => {label: label, list: prs}
 end
 
 def api_get(url)
@@ -45,10 +45,9 @@ end
 def get_sorted_github_pr_list_by_label(label)
   query = "state:open type:pr user:thinkthroughmath label:\"#{label}\""
   api_response = api_get("https://api.github.com/search/issues?q=#{query}")
-  issues = api_response['items']
   label = query.match(/label:\"(.*)\"/)[1]
-  issues_with_label = get_label_event_data(issues, label)
-  sort_items(issues_with_label)
+  prs_with_label = get_label_event_data(api_response['items'], label)
+  sort_items(prs_with_label)
 end
 
 def sort_items(items)
