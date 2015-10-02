@@ -1,4 +1,3 @@
-# TODO: Add tests
 # TODO: Setup to deploy to Heroku
 # TODO: Make issue numbers links to github
 # TODO: Multiple get methods for Needs QA, Needs Code Review, WIP, etc.
@@ -25,13 +24,14 @@ get '/needs_cr' do
   haml :index, :locals => {label: label, issues: issues}
 end
 
-def get_sorted_github_pr_list_by_label(label)
-  query = "state:open type:pr user:thinkthroughmath label:\"#{label}\""
-  api_response = api_get("https://api.github.com/search/issues?q=#{query}")
-  issues = api_response['items']
-  label = query.match(/label:\"(.*)\"/)[1]
-  issues_with_label = get_label_event_data(issues, label)
-  sort_items(issues_with_label)
+def api_get(url)
+  JSON.parse(
+    open(url,
+         'User-Agent' => GITHUB_USERNAME,
+         'Authorization' => 'token ' + GITHUB_TOKEN,
+         'Content-Type' => 'application/json',
+         'Accept' => 'application/json')
+    .read)
 end
 
 def get_label_event_data(items, label)
@@ -42,16 +42,15 @@ def get_label_event_data(items, label)
   end
 end
 
-def sort_items(items)
-  items.sort_by { |i| i['label_event_data']['created_at'] }
+def get_sorted_github_pr_list_by_label(label)
+  query = "state:open type:pr user:thinkthroughmath label:\"#{label}\""
+  api_response = api_get("https://api.github.com/search/issues?q=#{query}")
+  issues = api_response['items']
+  label = query.match(/label:\"(.*)\"/)[1]
+  issues_with_label = get_label_event_data(issues, label)
+  sort_items(issues_with_label)
 end
 
-def api_get(url)
-  JSON.parse(
-    open(url,
-         'User-Agent' => GITHUB_USERNAME,
-         'Authorization' => 'token ' + GITHUB_TOKEN,
-         'Content-Type' => 'application/json',
-         'Accept' => 'application/json')
-    .read)
+def sort_items(items)
+  items.sort_by { |i| i['label_event_data']['created_at'] }
 end
