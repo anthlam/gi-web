@@ -12,26 +12,26 @@ require 'haml'
 
 GITHUB_USERNAME = ENV['GITHUB_USERNAME']
 GITHUB_TOKEN = ENV['GITHUB_TOKEN']
-BASE_URL = 'https://api.github.com'
 
 get '/needs_qa' do
-  query = 'state:open type:pr user:thinkthroughmath label:"Needs QA"'
-  api_response = api_get("#{BASE_URL}/search/issues?q=#{query}")
-  issues = api_response['items']
-  label = query.match(/label:\"(.*)\"/)[1]
-  issues = get_label_event_data(issues, label)
-  issues = sort_items(issues)
+  label = 'Needs QA'
+  issues = get_sorted_github_pr_list_by_label(label)
   haml :index, :locals => {label: label, issues: issues}
 end
 
 get '/needs_cr' do
-  query = 'state:open type:pr user:thinkthroughmath label:"Needs Code Review"'
-  api_response = api_get("#{BASE_URL}/search/issues?q=#{query}")
+  label = 'Needs Code Review'
+  issues = get_sorted_github_pr_list_by_label(label)
+  haml :index, :locals => {label: label, issues: issues}
+end
+
+def get_sorted_github_pr_list_by_label(label)
+  query = "state:open type:pr user:thinkthroughmath label:\"#{label}\""
+  api_response = api_get("https://api.github.com/search/issues?q=#{query}")
   issues = api_response['items']
   label = query.match(/label:\"(.*)\"/)[1]
-  issues = get_label_event_data(issues, label)
-  issues = sort_items(issues)
-  haml :index, :locals => {label: label, issues: issues}
+  issues_with_label = get_label_event_data(issues, label)
+  sort_items(issues_with_label)
 end
 
 def get_label_event_data(items, label)
