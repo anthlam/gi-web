@@ -1,3 +1,4 @@
+# TODO: Parameterize gets to include api query params (user, type, state, label)
 # TODO: Setup to deploy to Heroku
 # TODO: Make issue numbers links to github
 # TODO: Multiple get methods for Needs QA, Needs Code Review, WIP, etc.
