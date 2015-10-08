@@ -13,6 +13,10 @@ require 'haml'
 GITHUB_USERNAME = ENV['GITHUB_USERNAME']
 GITHUB_TOKEN = ENV['GITHUB_TOKEN']
 
+get '/' do
+  redirect '/needs_qa'
+end
+
 get '/needs_qa' do
   label = 'Needs QA'
   prs = get_sorted_github_pr_list_by_label(label)
