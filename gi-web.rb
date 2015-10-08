@@ -20,13 +20,15 @@ end
 get '/needs_qa' do
   label = 'Needs QA'
   prs = get_sorted_github_pr_list_by_label(label)
-  haml :index, :locals => {label: label, list: prs}
+  link ={label: 'Needs Code Review', endpoint: '/needs_cr'}
+  haml :index, :locals => {label: label, list: prs, link: link}
 end
 
 get '/needs_cr' do
   label = 'Needs Code Review'
   prs = get_sorted_github_pr_list_by_label(label)
-  haml :index, :locals => {label: label, list: prs}
+  link = {:label => 'Needs QA', :endpoint => '/needs_qa'}
+  haml :index, :locals => {label: label, list: prs, link: link }
 end
 
 def api_get(url)
